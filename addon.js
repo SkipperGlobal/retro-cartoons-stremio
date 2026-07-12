@@ -2,7 +2,8 @@ const { addonBuilder } = require("stremio-addon-sdk");
 const fetch = require("node-fetch");
 const { getNetwork, resolveList } = require("./tmdb");
 const C = require("./classics");
-const DUBS = require("./dubmap");
+const DUBLIST = require("./dubs");
+const DUBS = Object.fromEntries(DUBLIST.map((d) => [d.imdb, d.slug]));
 
 // Build a comprehensive de-duplicated "Full Vault" series list from all series
 // categories, sorted oldest-first at request time by the resolver.
@@ -35,6 +36,7 @@ const CURATED = [
   { id: "disney-afternoon", name: "The Disney Afternoon", type: "series", list: C.disney_afternoon },
   { id: "european", name: "European Classics", type: "series", list: C.european },
   { id: "ex-yu", name: "Ex-Yu Classics", type: "series", list: C.ex_yu },
+  { id: "dubs-sr", name: "🇷🇸 Sinhronizovani Crtaći", type: "series", list: DUBLIST },
   { id: "scooby-movies", name: "Scooby-Doo Movies", type: "movie", list: C.scooby_movies },
   { id: "cn-movies", name: "Cartoon Network Movies", type: "movie", list: C.cn_movies },
   { id: "classic-movies", name: "Classic Cartoon Movies", type: "movie", list: C.classic_movies },
@@ -50,7 +52,7 @@ const NETWORKS = [
 
 const manifest = {
   id: "community.retro.cartoons",
-  version: "9.0.0",
+  version: "10.0.0",
   name: "Retro Cartoons",
   description:
     "The complete golden-age cartoon vault: everything Cartoon Network aired " +
