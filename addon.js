@@ -5,6 +5,12 @@ const C = require("./classics");
 const DUBLIST = require("./dubs");
 const DUBS = Object.fromEntries(DUBLIST.map((d) => [d.imdb, d.slug]));
 
+// Direct stream links (bypass page fetch; used where Cloudflare blocks the
+// server from reading the episode page). Key: "imdb:season:episode".
+const DIRECT = {
+  "tt0092633:1:1": "https://staricrtaci.com/v/aWrKZ-U6P/index.m3u8",
+};
+
 // Build a comprehensive de-duplicated "Full Vault" series list from all series
 // categories, sorted oldest-first at request time by the resolver.
 function dedupe(lists) {
@@ -52,7 +58,7 @@ const NETWORKS = [
 
 const manifest = {
   id: "community.retro.cartoons",
-  version: "10.0.0",
+  version: "11.0.0",
   name: "Retro Cartoons",
   description:
     "The complete golden-age cartoon vault: everything Cartoon Network aired " +
@@ -105,6 +111,16 @@ const OG_VIDEO = [
 
 builder.defineStreamHandler(async ({ id }) => {
   const [imdb, season, episode] = id.split(":");
+
+  // 1) Direct link if we have one (plays from the viewer's own IP).
+  const direct = DIRECT[`${imdb}:${season}:${episode}`];
+  if (direct) {
+    return {
+      streams: [{ name: "Stari crtaći", title: "🇷🇸 Srpska sinhronizacija", url: direct }],
+    };
+  }
+
+  // 2) Otherwise try reading the episode page (works when not IP-blocked).
   const slug = DUBS[imdb];
   if (!slug || !season || !episode) return { streams: [] };
   const pageUrl = `https://staricrtaci.com/kratkometrazni/${slug}/season-${season}/episode-${episode}/`;
