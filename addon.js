@@ -1,6 +1,8 @@
 const { addonBuilder } = require("stremio-addon-sdk");
+const fetch = require("node-fetch");
 const { getNetwork, resolveList } = require("./tmdb");
 const C = require("./classics");
+const DUBS = require("./dubmap");
 
 // Build a comprehensive de-duplicated "Full Vault" series list from all series
 // categories, sorted oldest-first at request time by the resolver.
@@ -31,6 +33,8 @@ const CURATED = [
   { id: "toonami", name: "Toonami & Anime", type: "series", list: C.toonami },
   { id: "saturday-morning", name: "Saturday Morning Classics", type: "series", list: C.saturday_morning },
   { id: "disney-afternoon", name: "The Disney Afternoon", type: "series", list: C.disney_afternoon },
+  { id: "european", name: "European Classics", type: "series", list: C.european },
+  { id: "ex-yu", name: "Ex-Yu Classics", type: "series", list: C.ex_yu },
   { id: "scooby-movies", name: "Scooby-Doo Movies", type: "movie", list: C.scooby_movies },
   { id: "cn-movies", name: "Cartoon Network Movies", type: "movie", list: C.cn_movies },
   { id: "classic-movies", name: "Classic Cartoon Movies", type: "movie", list: C.classic_movies },
@@ -46,7 +50,7 @@ const NETWORKS = [
 
 const manifest = {
   id: "community.retro.cartoons",
-  version: "7.0.0",
+  version: "9.0.0",
   name: "Retro Cartoons",
   description:
     "The complete golden-age cartoon vault: everything Cartoon Network aired " +
@@ -54,7 +58,7 @@ const manifest = {
     "Toonami/anime), plus Scooby / CN / classic cartoon movies and live " +
     "network browse rows. Catalog only, keyed by IMDb IDs so your own stream " +
     "addons handle playback.",
-  resources: ["catalog"],
+  resources: ["catalog", "stream"],
   types: ["series", "movie"],
   idPrefixes: ["tt"],
   catalogs: [
@@ -88,6 +92,46 @@ builder.defineCatalogHandler(async ({ id, extra }) => {
   } catch (e) {
     console.error("[cn-addon] catalog error:", e.message);
     return { metas: [] };
+  }
+});
+
+// --- Serbian-dub streams from staricrtaci.com (own site) ---
+const OG_VIDEO = [
+  /<meta[^>]+property=["']og:video["'][^>]+content=["']([^"']+)["']/i,
+  /<meta[^>]+content=["']([^"']+\.m3u8[^"']*)["'][^>]+property=["']og:video["']/i,
+];
+
+builder.defineStreamHandler(async ({ id }) => {
+  const [imdb, season, episode] = id.split(":");
+  const slug = DUBS[imdb];
+  if (!slug || !season || !episode) return { streams: [] };
+  const pageUrl = `https://staricrtaci.com/kratkometrazni/${slug}/season-${season}/episode-${episode}/`;
+  try {
+    const res = await fetch(pageUrl, { headers: { "User-Agent": "Mozilla/5.0" } });
+    if (!res.ok) return { streams: [] };
+    const html = await res.text();
+    let m = null;
+    for (const re of OG_VIDEO) { m = html.match(re); if (m) break; }
+    if (!m) return { streams: [] };
+    const url = m[1].replace(/&amp;/g, "&");
+    return {
+      streams: [
+        {
+          name: "Stari crtaći",
+          title: "🇷🇸 Srpska sinhronizacija",
+          url,
+          behaviorHints: {
+            notWebReady: true,
+            proxyHeaders: {
+              request: { Referer: "https://staricrtaci.com/", "User-Agent": "Mozilla/5.0" },
+            },
+          },
+        },
+      ],
+    };
+  } catch (e) {
+    console.error("[dubs] error:", e.message);
+    return { streams: [] };
   }
 });
 

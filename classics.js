@@ -349,3 +349,57 @@ module.exports.disney_afternoon = [
   { t: "American Dragon: Jake Long", y: 2005, type: "series" },
   { t: "Phineas and Ferb", y: 2007, type: "series" },
 ];
+
+// European classics (Franco-Belgian, Euro-anime co-productions, regional)
+module.exports.european = [
+  { t: "Professor Balthazar", y: 1967, type: "series" },
+  { t: "Calimero", y: 1972, type: "series" },
+  { t: "Heidi, Girl of the Alps", y: 1974, type: "series" },
+  { t: "Maya the Bee", y: 1975, type: "series" },
+  { t: "Vicky the Viking", y: 1974, type: "series" },
+  { t: "Once Upon a Time... Man", y: 1978, type: "series" },
+  { t: "Doctor Snuggles", y: 1979, type: "series" },
+  { t: "Sport Billy", y: 1979, type: "series" },
+  { t: "Nils Holgersson", y: 1980, type: "series" },
+  { t: "Dogtanian and the Three Muskehounds", y: 1981, type: "series" },
+  { t: "Ulysses 31", y: 1981, type: "series" },
+  { t: "The Mysterious Cities of Gold", y: 1982, type: "series" },
+  { t: "Around the World with Willy Fog", y: 1983, type: "series" },
+  { t: "SuperTed", y: 1983, type: "series" },
+  { t: "Lucky Luke", y: 1984, type: "series" },
+  { t: "Sherlock Hound", y: 1984, type: "series" },
+  { t: "The World of David the Gnome", y: 1985, type: "series" },
+  { t: "Asterix", y: 1985, type: "series" },
+  { t: "Babar", y: 1989, type: "series" },
+  { t: "Alfred J. Kwak", y: 1989, type: "series" },
+  { t: "The Moomins", y: 1990, type: "series" },
+  { t: "The Adventures of Tintin", y: 1991, type: "series" },
+  { t: "Sandokan", y: 1992, type: "series" },
+  { t: "Iznogoud", y: 1995, type: "series" },
+  { t: "Pippi Longstocking", y: 1997, type: "series" },
+];
+
+// European animated films to fold into the Classic Cartoon Movies row
+module.exports.classic_movies.push(
+  { t: "Asterix the Gaul", y: 1967, type: "movie" },
+  { t: "Asterix and Cleopatra", y: 1968, type: "movie" },
+  { t: "The Twelve Tasks of Asterix", y: 1976, type: "movie" },
+  { t: "Lucky Luke: Daisy Town", y: 1971, type: "movie" },
+  { t: "Lucky Luke: Ballad of the Daltons", y: 1978, type: "movie" },
+  { t: "Asterix Conquers America", y: 1994, type: "movie" },
+  { t: "Asterix and the Vikings", y: 2006, type: "movie" }
+);
+
+// Ex-Yu / Serbian TV staples (what actually aired on RTS, Politika, BK, Pink)
+module.exports.ex_yu = [
+  { t: "Woody Woodpecker", y: 1957, type: "series" },
+  { t: "Popeye the Sailor", y: 1960, type: "series" },
+  { t: "The Hillbilly Bears", y: 1965, type: "series" },
+  { t: "The Pink Panther Show", y: 1969, type: "series" },
+  { t: "Laff-A-Lympics", y: 1977, type: "series" },
+  { t: "Garfield and Friends", y: 1988, type: "series" },
+  { t: "Sharky & George", y: 1989, type: "series" },
+  { t: "Hey Arnold!", y: 1996, type: "series" },
+  { t: "The Wild Thornberrys", y: 1998, type: "series" },
+  { t: "SpongeBob SquarePants", y: 1999, type: "series" },
+];
