@@ -1,0 +1,16 @@
+{
+  "name": "stremio-cartoon-network-catalog",
+  "version": "1.0.0",
+  "description": "Self-hosted Stremio catalog addon: a Cartoon Network row (and movies) powered by TMDB, keyed by IMDb IDs so Cinemeta + your stream addons just work.",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "node-fetch": "^2.7.0",
+    "stremio-addon-sdk": "^1.6.10"
+  },
+  "engines": {
+    "node": ">=16"
+  }
+}
